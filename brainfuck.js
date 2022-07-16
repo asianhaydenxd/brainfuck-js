@@ -84,14 +84,14 @@ async function interpret(code, defaultInput = "", consoleLogging = true) {
         index += 1;
     }
 
-    return {inLog, outLog};
+    return {inLog, outLog, inputBacklog};
 }
 
 async function runFile(fileName, defaultInput = "", consoleLogging = true) {
     const {promises: fsPromises} = require('fs');
     const code = await fsPromises.readFile(fileName, 'utf-8');
-    let {inLog, outLog} = await interpret(code, defaultInput, consoleLogging);
-    return {inLog, outLog};
+    let {inLog, outLog, inputBacklog} = await interpret(code, defaultInput, consoleLogging);
+    return {inLog, outLog, inputBacklog};
 }
 
 const args = process.argv.slice(2);
