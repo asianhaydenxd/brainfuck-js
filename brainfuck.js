@@ -104,6 +104,9 @@ async function runFromCL() {
         return;
     }
 
+    if (args.indexOf("-d") != args.lastIndexOf("-d")) throw "The command line flag -d can only be used once!"
+    if (args.indexOf("-l") != args.lastIndexOf("-l")) throw "The command line flag -l can only be used once!"
+
     let {inLog, outLog, inputBacklog} = await runFile(args[0], 
                                                       defaultInput = args.includes("-d") ? args[args.indexOf("-d") + 1] : "", 
                                                       consoleLogging = args.includes("-n") ? false : true);
