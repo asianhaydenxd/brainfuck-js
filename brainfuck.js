@@ -1,8 +1,27 @@
+function makeBraceMap(code) {
+    const braceStack = [];
+    const braceMap = [];
+    
+    for (let index = 0; index < code.length; index++) {
+        if (code[index] == '[') {
+            braceStack.push(index);
+        }
+        else if (code[index] == ']') {
+            let matchingIndex = braceStack.pop()
+            braceMap[matchingIndex] = index;
+            braceMap[index] = matchingIndex;
+        }
+    }
+
+    return braceMap;
+}
+
 function interpret(code) {
     let index = 0;
 
     let pointer = 0;
     const tape = [0];
+    const braceMap = makeBraceMap(code);
 
     while (index < code.length) {
         switch (code[index]) {
@@ -25,10 +44,16 @@ function interpret(code) {
                 pointer -= 1;
                 if (pointer < 0) throw "Don't go below zero!"
                 break;
+            case '[': // If pointed cell is zero, jump forward to matching brace; skip otherwise
+                if (tape[pointer] == 0) index = braceMap[index];
+                break;
+            case ']': // If pointed cell is greater than zero, jump back to matching brace; skip otherwise
+                if (tape[pointer] > 0) index = braceMap[index];
+                break;
         }
 
         index += 1;
     }
 }
 
-interpret(".+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+.+");
+interpret("+[.+]");
