@@ -11,9 +11,11 @@ function interpret(code) {
                 break;
             case '+': // Increment pointed cell by 1
                 tape[pointer] += 1;
+                if (tape[pointer] > 255) tape[pointer] = 0
                 break;
             case '-': // Decrement pointed cell by 1
                 tape[pointer] -= 1;
+                if (tape[pointer] < 0) tape[pointer] = 255
                 break;
             case '>': // Shift pointer right by 1
                 pointer += 1;
@@ -29,4 +31,4 @@ function interpret(code) {
     }
 }
 
-interpret("++>+<.>.<<"); // should print 2 then 1
+interpret("-.");
