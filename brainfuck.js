@@ -16,14 +16,14 @@ function makeBraceMap(code) {
     return braceMap;
 }
 
-async function interpret(code, consoleLogging = true) {
+async function interpret(code, defaultInput = "", consoleLogging = true) {
     let index = 0;
 
     let pointer = 0;
     const tape = [0];
     const braceMap = makeBraceMap(code);
 
-    let inputBacklog = "";
+    let inputBacklog = defaultInput;
 
     let inLog = "";
     let outLog = "";
@@ -50,7 +50,7 @@ async function interpret(code, consoleLogging = true) {
                 rl.close();
                 rl.on('close', () => process.exit(0));
                 
-                if (input.length == 0) throw "Input must be exactly 1 character!";
+                if (input.length == 0) throw "Input log is empty!";
 
                 if (input.length > 1) inputBacklog += input.slice(1);
                 
@@ -87,10 +87,10 @@ async function interpret(code, consoleLogging = true) {
     return {inLog, outLog};
 }
 
-async function runFile(fileName, consoleLogging = true) {
+async function runFile(fileName, defaultInput = "", consoleLogging = true) {
     const {promises: fsPromises} = require('fs');
     const code = await fsPromises.readFile(fileName, 'utf-8');
-    let {inLog, outLog} = await interpret(code, consoleLogging);
+    let {inLog, outLog} = await interpret(code, defaultInput, consoleLogging);
     return {inLog, outLog};
 }
 
@@ -100,4 +100,5 @@ if (args.length == 0) {
     console.log("Syntax: node .\\brainfuck.js <filename>");
     return;
 }
+
 runFile(args[0]);
