@@ -94,11 +94,20 @@ async function runFile(fileName, defaultInput = "", consoleLogging = true) {
     return {inLog, outLog, inputBacklog};
 }
 
-const args = process.argv.slice(2);
-if (args.length == 0) {
-    console.log("Error: no file input provided");
-    console.log("Syntax: node .\\brainfuck.js <filename>");
-    return;
+async function runFromCL() {
+    const args = process.argv.slice(2);
+
+    if (args.length == 0) {
+        console.log("Error: no file input provided");
+        console.log("Syntax: node .\\brainfuck.js <filename>");
+        return;
+    }
+
+    let {inLog, outLog, inputBacklog} = await runFile(args[0], 
+                                                      defaultInput = args.includes("-d") ? args[args.indexOf("-d") + 1] : "", 
+                                                      consoleLogging = args.includes("-n") ? false : true);
+
+    if (args.includes("-l")) console.log({inLog, outLog, inputBacklog});
 }
 
-runFile(args[0]);
+runFromCL();
