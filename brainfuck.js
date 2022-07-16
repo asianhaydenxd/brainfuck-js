@@ -36,6 +36,7 @@ async function interpret(code, defaultInput = "", consoleLogging = true) {
                 break;
             case ',':
                 if (inputBacklog.length > 0) {
+                    inLog += inputBacklog.charAt(0);
                     tape[pointer] = inputBacklog.charCodeAt(0);
                     inputBacklog = inputBacklog.slice(1)
                     break;
