@@ -16,7 +16,7 @@ function makeBraceMap(code) {
     return braceMap;
 }
 
-async function interpret(code) {
+async function interpret(code, consoleLogging = true) {
     let index = 0;
 
     let pointer = 0;
@@ -25,10 +25,14 @@ async function interpret(code) {
 
     let inputBacklog = "";
 
+    let inLog = "";
+    let outLog = "";
+
     while (index < code.length) {
         switch (code[index]) {
             case '.': // Output pointed cell as per its ASCII value
-                process.stdout.write(String.fromCharCode(tape[pointer])); // This is temporary (just prints the number value) until I figure out how to convert ints into ASCII chars
+                outLog += String.fromCharCode(tape[pointer]);
+                if (consoleLogging) process.stdout.write(String.fromCharCode(tape[pointer]));
                 break;
             case ',':
                 if (inputBacklog.length > 0) {
@@ -49,7 +53,8 @@ async function interpret(code) {
                 if (input.length == 0) throw "Input must be exactly 1 character!";
 
                 if (input.length > 1) inputBacklog += input.slice(1);
-
+                
+                inLog += input.charAt(0);
                 tape[pointer] = input.charCodeAt(0);
                 break;
             case '+': // Increment pointed cell by 1
@@ -78,18 +83,21 @@ async function interpret(code) {
 
         index += 1;
     }
+
+    return {inLog, outLog};
 }
 
-async function runFile(fileName) {
+async function runFile(fileName, consoleLogging = true) {
     const {promises: fsPromises} = require('fs');
     const code = await fsPromises.readFile(fileName, 'utf-8');
-    await interpret(code);
+    let {inLog, outLog} = await interpret(code, consoleLogging);
+    return {inLog, outLog};
 }
 
 const args = process.argv.slice(2);
 if (args.length == 0) {
-    console.log("Error: no file input provided")
-    console.log("Syntax: node .\\brainfuck.js <filename>")
+    console.log("Error: no file input provided");
+    console.log("Syntax: node .\\brainfuck.js <filename>");
     return;
 }
-runFile(args[0])
+runFile(args[0]);
