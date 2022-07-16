@@ -85,3 +85,11 @@ async function runFile(fileName) {
     const code = await fsPromises.readFile(fileName, 'utf-8');
     await interpret(code);
 }
+
+const args = process.argv.slice(2);
+if (args.length == 0) {
+    console.log("Error: no file input provided")
+    console.log("Syntax: node .\\brainfuck.js <filename>")
+    return;
+}
+runFile(args[0])
