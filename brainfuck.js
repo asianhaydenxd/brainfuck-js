@@ -15,10 +15,18 @@ function interpret(code) {
             case '-': // Decrement pointed cell by 1
                 tape[pointer] -= 1;
                 break;
+            case '>': // Shift pointer right by 1
+                pointer += 1;
+                if (pointer >= tape.length) tape[pointer] = 0;
+                break;
+            case '<': // Shift pointer left by 1
+                pointer -= 1;
+                if (pointer < 0) throw "Don't go below zero!"
+                break;
         }
 
         index += 1;
     }
 }
 
-interpret("++++.");
+interpret("++>+<.>.<<"); // should print 2 then 1
