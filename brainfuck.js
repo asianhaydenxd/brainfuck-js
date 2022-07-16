@@ -106,7 +106,7 @@ async function runFromCL() {
 
     if (args.indexOf("-l") != args.lastIndexOf("-l")) throw "The command line flag -l can only be used once!"
     if (args.indexOf("-d") != args.lastIndexOf("-d")) throw "The command line flag -d can only be used once!"
-    if (args.indexOf("-d") + 1 >= args.length) throw "The command line flag -d must have a valid parameter!"
+    if (args.indexOf("-d") + 1 >= args.length) throw "The command line flag -d must have a valid argument!"
 
     let {inLog, outLog, inputBacklog} = await runFile(args[0], 
                                                       defaultInput = args.includes("-d") ? args[args.indexOf("-d") + 1] : "", 
