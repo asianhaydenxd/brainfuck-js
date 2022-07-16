@@ -80,5 +80,8 @@ async function interpret(code) {
     }
 }
 
-
-interpret(",...,...");
+async function runFile(fileName) {
+    const {promises: fsPromises} = require('fs');
+    const code = await fsPromises.readFile(fileName, 'utf-8');
+    await interpret(code);
+}
