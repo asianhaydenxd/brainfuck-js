@@ -32,3 +32,11 @@ You can also use both flags in any order simultaneously:
 
     node .\brainfuck.js <file> -d "ABCDEFG" -l
     node .\brainfuck.js <file> -l -d "ABCDEFG"
+
+If you don't really want to create a new file to run some code, you can run brainfuck code directly from the command line.
+
+    node .\brainfuck.js -c "insert brainfuck code here"
+
+All other flags may apply here too.
+
+    node .\brainfuck.js -l -c ",>,>,>,<<<.>.>.>." -d ""
