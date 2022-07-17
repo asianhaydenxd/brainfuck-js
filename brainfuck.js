@@ -100,18 +100,23 @@ async function runFromCL() {
 
     if (args.length == 0) {
         console.log("Error: no file input provided");
-        console.log("Syntax: node .\\brainfuck.js <filename>");
+        console.log("Syntax: node .\\brainfuck.js <filename> <flags>");
         return;
     }
 
     if (args.indexOf("-l") != args.lastIndexOf("-l")) throw "The command line flag -l can only be used once!"
     if (args.indexOf("-d") != args.lastIndexOf("-d")) throw "The command line flag -d can only be used once!"
     if (args.indexOf("-d") + 1 >= args.length) throw "The command line flag -d must have a valid argument!"
+    if (args.indexOf("-c") != args.lastIndexOf("-c")) throw "The command line flag -c can only be used once!"
+    if (args.indexOf("-c") + 1 >= args.length) throw "The command line flag -c must have a valid argument!"
 
-    let {inLog, outLog, inputBacklog} = await runFile(args[0], 
-                                                      defaultInput = args.includes("-d") ? args[args.indexOf("-d") + 1] : "", 
-                                                      consoleLogging = args.includes("-n") ? false : true);
-
+    if (args.includes("-c")) {
+        let {inLog, outLog, inputBacklog} = await interpret(args[args.indexOf("-c") + 1])
+    } else {
+        let {inLog, outLog, inputBacklog} = await runFile(args[0], 
+                                                          defaultInput = args.includes("-d") ? args[args.indexOf("-d") + 1] : "", 
+                                                          consoleLogging = args.includes("-n") ? false : true);
+    }
     if (args.includes("-l")) console.log({inLog, outLog, inputBacklog});
 }
 
