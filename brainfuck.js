@@ -111,13 +111,18 @@ async function runFromCL() {
     if (args.indexOf("-c") + 1 >= args.length) throw "The command line flag -c must have a valid argument!"
 
     if (args.includes("-c")) {
-        let {inLog, outLog, inputBacklog} = await interpret(args[args.indexOf("-c") + 1])
+        let {inLog, outLog, inputBacklog} = await interpret(
+            args[args.indexOf("-c") + 1],
+            defaultInput = args.includes("-d") ? args[args.indexOf("-d") + 1] : "",
+            consoleLogging = args.includes("-n") ? false : true);
+        if (args.includes("-l")) console.log({inLog, outLog, inputBacklog});
     } else {
-        let {inLog, outLog, inputBacklog} = await runFile(args[0], 
-                                                          defaultInput = args.includes("-d") ? args[args.indexOf("-d") + 1] : "", 
-                                                          consoleLogging = args.includes("-n") ? false : true);
+        let {inLog, outLog, inputBacklog} = await runFile(
+            args[0], 
+            defaultInput = args.includes("-d") ? args[args.indexOf("-d") + 1] : "", 
+            consoleLogging = args.includes("-n") ? false : true);
+        if (args.includes("-l")) console.log({inLog, outLog, inputBacklog});
     }
-    if (args.includes("-l")) console.log({inLog, outLog, inputBacklog});
 }
 
 runFromCL();
